@@ -1,7 +1,19 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Todo = require("../models/Todo");
 
 const router = express.Router();
+
+function requireDb(_req, res, next) {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({
+      error: "MongoDB에 연결되어 있지 않습니다. Heroku Config Vars의 MONGO_URI를 확인하세요.",
+    });
+  }
+  next();
+}
+
+router.use(requireDb);
 
 router.get("/", async (_req, res) => {
   try {

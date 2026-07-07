@@ -45,11 +45,12 @@ app.listen(PORT, () => {
 });
 
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, {
+    serverSelectionTimeoutMS: 10000,
+  })
   .then(() => {
     console.log("연결성공");
   })
   .catch((error) => {
     console.error("MongoDB 연결 실패:", error.message);
-    process.exit(1);
   });
